@@ -16,5 +16,15 @@ app.post('/orders', (req, res) => {
   orders.push(order);
   res.status(201).json(order);
 });
+
+// NEW FEATURE: track order status by id
+app.get('/orders/:id/status', (req, res) => {
+  const order = orders.find(o => o.id === parseInt(req.params.id));
+  if (!order) return res.status(404).json({ message: 'Order not found' });
+  res.json({ id: order.id, status: order.status });
+});
+
+// NEW FEATURE: health check endpoint
+app.get('/health', (req, res) => res.json({ service: 'Order Service', status: 'UP' }));
  
 app.listen(3000, () => console.log('Order Service running on port 3000'));
